@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from . import models, schemas
+
+from .. import models
+from .. import schemas
 
 # ----- Ingredient CRUD -----
 

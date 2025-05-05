@@ -21,10 +21,48 @@ Certifique-se de ter os seguintes itens instalados no seu sistema:
 
 ## Configuração do Ambiente
 
+### 1. Usando Docker:
+
 1. **Clone o repositório**:
    ```bash
-   git clone <URL_DO_REPOSITORIO>
-   cd Recipe_API/pyRecipe_API
+   git clone https://github.com/maetsuji/pyRecipeApi.git
+   cd pyRecipe_API
+   ```
+
+2. **Construa utilizando `docker build`:**
+   ```bash
+   docker build -t pyrecipeapi .
+   ```
+   Esse comando cria uma imagem Docker chamada `pyrecipeapi` usando o arquivo `Dockerfile` localizado no diretório atual.
+
+3. **Rode utilizando `docker run`:**
+   ```bash
+   docker run -d -p 8000:8000 --env-file .env -it --rm --name pyrecipeapi-running pyrecipeapi
+   ```
+   Esse comando executa o contêiner Docker da imagem pyrecipeapi:
+   - **`-d`**: Executa o contêiner em modo detached (em segundo plano), permitindo que ele continue rodando sem bloquear o terminal.
+   - **`-p 8000:8000`**: Mapeia a porta 8000 do contêiner para o host.
+   - **`--env-file .env`**: Carrega variáveis de ambiente do arquivo `.env`.
+   - **`-it`**: Permite interação com o terminal.
+   - **`--rm`**: Remove o contêiner ao parar.
+   - **`--name`**: Nomeia o contêiner como `pyrecipeapi-running`.
+
+
+4. **Acesse a documentação interativa**:
+   - Abra o navegador e acesse: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) (Swagger UI)
+
+
+5. **Para interromper a execução:**
+   ```bash
+   docker stop pyrecipeapi-running
+   ```
+
+### 2. Configurando o ambiente manualmente:
+
+1. **Clone o repositório**:
+   ```bash
+   git clone https://github.com/maetsuji/pyRecipeApi.git
+   cd pyRecipe_API
    ```
 
 2. **Crie e ative um ambiente virtual** (opcional, mas recomendado):
@@ -39,17 +77,15 @@ Certifique-se de ter os seguintes itens instalados no seu sistema:
    ```
 
 4. **Configure o arquivo `.env`**:
-   Crie um arquivo `.env` na raiz do projeto e configure as variáveis de ambiente necessárias. Exemplo:
+   Configure as variáveis de ambiente necessárias no arquivo `.env`. Padrão:
    ```
    DATABASE_URL=sqlite:///./recipes.db
    ```
 
-5. **Inicialize o banco de dados**:
+5. **Inicializando o banco de dados**:
    O banco de dados será automaticamente criado e configurado ao iniciar o projeto.
 
----
-
-## Executando o Projeto
+### Executando o Projeto
 
 1. **Inicie o servidor FastAPI**:
    ```bash
