@@ -1,53 +1,41 @@
-## https://hub.docker.com/_/python
-
-### Estágio 1: Ambiente de build ###
-## Usa a imagem slim do Python como base
+### Estágio 1: Build com Python 3.13-slim ###
 FROM python:3.13-slim AS builder
+## Define o diretório de trabalho dentro do container
 LABEL stage=builder
-# FROM python:3.13.3-slim 
-# FROM python:3
+WORKDIR /api-build
 
-## Define o diretório de trabalho dentro do container
-WORKDIR /pyrecipeapi
+## Atualiza e instala dependências necessárias apenas para o build
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-## Instala o venv e remove os arquivos de cache do apt
-RUN apt-get update && apt-get install -y python3-venv && rm -rf /var/lib/apt/lists/*
-
-## Cria e ativa o ambiente virtual
-RUN python3 -m venv /pyrecipeapi/venv
-ENV PATH="/pyrecipeapi/venv/bin:$PATH"
-
-## Instala as dependências do projeto
+## copia só o requirements para acelerar cache
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
 
-## Verifica se o uvicorn foi instalado corretamente
-RUN ls /pyrecipeapi/venv/bin && /pyrecipeapi/venv/bin/pip list
-## Verifica se o ambiente virtual foi criado corretamente
-RUN ls /pyrecipeapi/venv/bin && /pyrecipeapi/venv/bin/python --version
+## instala dependências em /app-dist
+RUN pip install --no-cache-dir --target /api-build-depend -r requirements.txt
 
-## Copia o código da aplicação para o container
-COPY . /pyrecipeapi/
+## copia o código da aplicação para o container
+COPY ./app /api-build/app
 
-### Estágio 2: Ambiente de execução (distroless) ###
-## Usa a versão slim do Python como base
+
+### Estágio 2: Runtime com Distroless (ou seria se funcionasse :[ ) ###
 # FROM gcr.io/distroless/python3-debian12:latest-amd64
-FROM python:3.13-slim
-
+FROM python:3.13-slim AS runtime
 ## Define o diretório de trabalho dentro do container
-WORKDIR /pyrecipeapi-runtime
+LABEL stage=runtime
+WORKDIR /api-runtime
 
-## Copia o código da aplicação do estágio de build
-COPY --from=builder /pyrecipeapi/ /pyrecipeapi-runtime/
+## traz código e dependências do builder
+COPY --from=builder /api-build /api-runtime
+COPY --from=builder /api-build-depend /api-runtime/api-runtime-depend
+## define o diretório de trabalho para que `main.py` seja reconhecido como um módulo local
 
-## Define a variável de ambiente para usar o ambiente virtual
-ENV PATH="/pyrecipeapi-runtime/venv/bin:$PATH"
+## adiciona dependências ao PYTHONPATH
+ENV PYTHONPATH=/api-runtime/api-runtime-depend
 
-## Expõe a porta em que o FastAPI será executado
+## expõe porta do FastAPI
 EXPOSE 8000
 
-## Define o diretório de trabalho para que `main.py` seja reconhecido como um módulo local
-WORKDIR /pyrecipeapi-runtime/
-
-## Executa o projeto
-CMD ["/pyrecipeapi-runtime/venv/bin/python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+## executa uvicorn
+CMD ["python3", "-m", "uvicorn", "app.main:app", "--host=0.0.0.0", "--port=8000"]

@@ -6,12 +6,12 @@ class Ingredient(Base):
     __tablename__ = 'ingredients'
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), unique=True, index=True, nullable=False)
-    unit_of_measure = Column(String, nullable=False)
+    unit_of_measure = Column(String(50), nullable=False)
 
 class Recipe(Base):
     __tablename__ = 'recipes'
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True, nullable=False)
+    name = Column(String(100), unique=True, index=True, nullable=False)
     preparation_method = Column(Text, nullable=False)
     ingredients = relationship(
         'RecipeIngredient',

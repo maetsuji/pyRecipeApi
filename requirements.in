@@ -2,5 +2,6 @@ fastapi
 uvicorn[standard]
 sqlalchemy
 pydantic
-pathlib 
 dotenv
+pymysql
+cryptography

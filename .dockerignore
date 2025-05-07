@@ -1,2 +1,12 @@
 .env
 .venv
+Dockerfile
+Dockerfile.old
+readme.md
+requirements.in
+.git
+__pycache__
+*.pyc
+*.pyo
+.env
+
