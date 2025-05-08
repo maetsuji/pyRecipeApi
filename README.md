@@ -1,3 +1,7 @@
+<!--- 
+      Documentação escrita parcialmente com o auxílio
+      de IA e claro, revisada por um humano B) 
+-->
 # pyRecipeAPI
 
 Este é um projeto de API para gerenciar receitas e ingredientes, desenvolvido com **FastAPI** e **SQLAlchemy**.
@@ -13,6 +17,7 @@ Este é um projeto de API para gerenciar receitas e ingredientes, desenvolvido c
 Certifique-se de ter os seguintes itens instalados no seu sistema:
 
 - **`python 3.10` ou superior**
+
 - **`pip`** (gerenciador de pacotes do Python): Ferramenta utilizada para instalar e gerenciar pacotes Python. Ele permite que você instale bibliotecas e dependências necessárias para o projeto diretamente do repositório PyPI.
 
 - **`pip-tools`**: Conjunto de ferramentas que ajudam a gerenciar dependências Python de forma mais eficiente. Ele inclui o `pip-compile`, que gera um arquivo `requirements.txt` a partir de um arquivo `requirements.in`, e o `pip-sync`, que sincroniza o ambiente com as dependências especificadas.
@@ -26,6 +31,7 @@ Certifique-se de ter os seguintes itens instalados no seu sistema:
 ## Executando o projeto usando Docker:
 
 ### **Utilize o shell script providenciado com o projeto**:
+  Esse script checa e instala as dependencias necessarias para o projeto, compila a lista de dependencias em `requirements.in` e roda o comando `docker compose`
 1. **Clone o repositório**:
   ```bash
   git clone https://github.com/maetsuji/pyRecipeApi.git
@@ -36,7 +42,6 @@ Certifique-se de ter os seguintes itens instalados no seu sistema:
   ```bash
   sudo sh pyrecipeapi.sh
   ```
-  Esse script instala todas as dependências necessárias para executá-lo com sucesso.   
   Se utilizou esse script, parabéns! Os contêineres já estão no ar.
 
 3. **Acesse a documentação interativa**:
@@ -48,11 +53,24 @@ Certifique-se de ter os seguintes itens instalados no seu sistema:
   ```
   ou simplesmente `[Ctrl + C]` no terminal em que o projeto está sendo executado.
 
+<!--- 
+## OU
+### 2. **Construa e rode manualmente o container**:
+1. **Clone o repositório**:
+  ```bash
+  git clone https://github.com/maetsuji/pyRecipeApi.git
+  cd pyRecipe_API
+  ```
+2. **Na raiz do projeto, execute**:
+  ```bash
+  sudo docker-compose up --build --remove-orphans
+  ```
+-->
 ---
 
 ### Configuração do Arquivo `.env`
 
-Certifique-se de configurar o arquivo `.env` com as variáveis de ambiente corretas. Exemplo:
+Certifique-se de configurar o arquivo `.env` com as suas variáveis de ambiente corretas. Exemplo:
 
 ```env
 DATABASE_URL=mysql+pymysql://root:root@db:3306/recipes
@@ -86,7 +104,7 @@ pyRecipe_API/
 ├── Dockerfile            # Especificações de como a aplicação será conteinerizada
 ├── docker-compose.yaml   # Configuração do Docker Compose
 ├── migrate_data.py       # Script de migração de dados
-├── run_pyrecipeapi.sh    # Shell Script de configuração automática da API
+├── pyrecipeapi.sh        # Shell Script de configuração automática da API
 └── app/
    ├── __init__.py       # Arquivo de inicialização do pacote
    ├── crud.py           # Operações CRUD para o banco de dados
