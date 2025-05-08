@@ -42,7 +42,6 @@ Certifique-se de ter os seguintes itens instalados no seu sistema:
   ```bash
   sudo sh pyrecipeapi.sh
   ```
-  Esse script instala todas as dependências necessárias para executá-lo com sucesso.   
   Se utilizou esse script, parabéns! Os contêineres já estão no ar.
 
 3. **Acesse a documentação interativa**:
