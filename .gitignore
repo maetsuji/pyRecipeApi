@@ -1,0 +1,6 @@
+.venv
+requirements.txt
+.git
+__pycache__
+*.pyc
+*.pyo
