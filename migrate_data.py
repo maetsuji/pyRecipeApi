@@ -1,3 +1,8 @@
+##
+## A criaçäo desse script foi parcialmente assistida
+## por IA para facilitar o processo de migração
+##
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models import Ingredient, Recipe, RecipeIngredient

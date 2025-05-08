@@ -16,13 +16,13 @@ services:
 #      - DB_USER=root
 #      - DB_PASSWORD=6672
 #      - DB_NAME=recipes
-    env_file: 
+    env_file:
       - .env
     depends_on:
       - db
     ports:
       - "8000:8000"
-  migrate: # used to migrate from sqlite db to mysql db
+  migrate: # used once to migrate from sqlite db to mysql db
     image: python:3.9
     volumes:
       - .:/app

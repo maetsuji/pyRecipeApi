@@ -15,27 +15,37 @@ COPY requirements.txt ./
 ## instala dependências em /app-dist
 RUN pip install --no-cache-dir --target /api-build-depend -r requirements.txt
 
-## copia o código da aplicação para o container
+## copia estritamente o código da aplicação para o container
 COPY ./app /api-build/app
 
+## tentativa GPTosa de corrigir para a versao distroless ##
+## Copy compiled dependencies (e.g., pydantic_core) and shared libraries
+# RUN mkdir /api-build/libs && \
+#    cp -r /api-build-depend/pydantic_core /api-build/libs/ && \
+#    ldd $(find /api-build-depend -name "*.so") | awk '{print $3}' | grep -v '^(' | xargs -I '{}' cp -v '{}' /api-build/libs/
 
 ### Estágio 2: Runtime com Distroless (ou seria se funcionasse :[ ) ###
-# FROM gcr.io/distroless/python3-debian12:latest-amd64
+# FROM gcr.io/distroless/python3-debian12 AS runtime
 FROM python:3.13-slim AS runtime
-## Define o diretório de trabalho dentro do container
 LABEL stage=runtime
 WORKDIR /api-runtime
 
-## traz código e dependências do builder
+## Copia código e dependências do estágio de build
 COPY --from=builder /api-build /api-runtime
 COPY --from=builder /api-build-depend /api-runtime/api-runtime-depend
-## define o diretório de trabalho para que `main.py` seja reconhecido como um módulo local
+# COPY --from=builder /api-build/libs /lib     
+## ^^^ parte da solucao gptosa
 
-## adiciona dependências ao PYTHONPATH
+## Define o PYTHONPATH para incluir dependências
 ENV PYTHONPATH=/api-runtime/api-runtime-depend
+# ENV LD_LIBRARY_PATH=/lib:$LD_LIBRARY_PATH         
+## ^^^ parte da solucao gptosa
 
-## expõe porta do FastAPI
+## Expõe a porta do FastAPI
 EXPOSE 8000
 
-## executa uvicorn
+## Define o comando de execução
 CMD ["python3", "-m", "uvicorn", "app.main:app", "--host=0.0.0.0", "--port=8000"]
+
+## debuggando, aparentemente o comando de execução distroless. por que? pois existe apenas o runtime do python?
+# CMD ["-m", "uvicorn", "app.main:app", "--host=0.0.0.0", "--port=8000"]
