@@ -73,24 +73,24 @@ Certifique-se de ter os seguintes itens instalados no seu sistema:
 Certifique-se de configurar o arquivo `.env` com as suas variáveis de ambiente corretas. Exemplo:
 
 ```env
-DATABASE_URL=mysql+pymysql://root:root@db:3306/recipes
+DATABASE_URL=postgresql+psycopg2://root:root@db:5432/recipes
 ```
 
 ---
 
-### Migração de Dados do SQLite para MySQL
+### Migração de Dados do SQLite para PostgreSQL
 
-No projeto, visando conteinerizar o banco de dados de forma separada da aplicação, precisei migrar de SQLite para MySQL.
-Se você possui um banco de dados SQLite (`recipes.db`) com dados existentes, pode migrá-los para o MySQL utilizando o serviço `migrate`:
+No projeto, visando conteinerizar o banco de dados de forma separada da aplicação, precisei migrar de SQLite para PostgreSQL.
+Se você possui um banco de dados SQLite (`recipes.db`) com dados existentes, pode migrá-los para o PostgreSQL utilizando o serviço `migrate`:
 
 1. Certifique-se de que o arquivo `recipes.db` está no diretório raiz do projeto.
 2. Execute o comando de migração:
   ```bash
   docker-compose run migrate
   ```
-3. Verifique se os dados foram migrados corretamente acessando o banco de dados MySQL:
+3. Verifique se os dados foram migrados corretamente acessando o banco de dados PostgreSQL:
   ```bash
-  docker exec -it <db_container_id> mysql -u root -p recipes
+  docker exec -it <db_container_id> psql -U root -d recipes
   ```
 
 ---

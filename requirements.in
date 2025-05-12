@@ -3,5 +3,5 @@ uvicorn[standard]
 sqlalchemy
 pydantic
 dotenv
-pymysql
+psycopg2-binary # Replaced pymysql for PostgreSQL
 cryptography

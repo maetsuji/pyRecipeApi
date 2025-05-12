@@ -1,11 +1,12 @@
 services:
   db:
-    image: mysql:8.0
+    image: postgres:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: recipes
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: recipes
     ports:
-      - "3306:3306"
+      - "5432:5432"
   app:
     build:
       context: .
@@ -22,7 +23,7 @@ services:
       - db
     ports:
       - "8000:8000"
-  migrate: # used once to migrate from sqlite db to mysql db
+  migrate: # used once to migrate from sqlite db to postgres db
     image: python:3.9
     volumes:
       - .:/app

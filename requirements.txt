@@ -28,6 +28,8 @@ httptools==0.6.4
     # via uvicorn
 idna==3.10
     # via anyio
+psycopg2-binary==2.9.10
+    # via -r requirements.in
 pycparser==2.22
     # via cffi
 pydantic==2.11.3
@@ -36,8 +38,6 @@ pydantic==2.11.3
     #   fastapi
 pydantic-core==2.33.1
     # via pydantic
-pymysql==1.1.1
-    # via -r requirements.in
 python-dotenv==1.1.0
     # via
     #   dotenv

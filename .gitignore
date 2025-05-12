@@ -1,6 +1,5 @@
 .venv
-requirements.txt
-.git
 __pycache__
 *.pyc
 *.pyo
+# .env      # Só está comentado para que o docker-compose funcione. Sempre excluir em um projeto real
